@@ -28,7 +28,7 @@ public class User {
     }
 
     public void setEmail(String email) {
-        if (User.isEmailValid(email))
+        if (isEmailValid(email))
             this.email = email;
         else
             throw new IllegalArgumentException("email must match RFC822 pattern");

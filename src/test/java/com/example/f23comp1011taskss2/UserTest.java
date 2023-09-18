@@ -15,6 +15,23 @@ class UserTest {
 
     @Test
     void setEmail() {
+        newUser.setEmail("fred@georgain.ca");
+        assertEquals("fred@georgian.ca",newUser.getEmail());
+    }
+
+    @Test
+    void setInvalidEmail() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            newUser.setEmail("");
+        });
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            newUser.setEmail("test");
+        });
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            newUser.setEmail(".@stuff");
+        });
     }
 
     @Test
