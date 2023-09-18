@@ -1,5 +1,7 @@
 package com.example.f23comp1011taskss2;
 
+import java.util.regex.Pattern;
+
 public class User {
     private String email, userName, phone;
 
@@ -20,8 +22,16 @@ public class User {
         return email;
     }
 
+    public static boolean isEmailValid(String email) {
+        final Pattern EMAIL_REGEX = Pattern.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", Pattern.CASE_INSENSITIVE);
+        return EMAIL_REGEX.matcher(email).matches();
+    }
+
     public void setEmail(String email) {
-        this.email = email;
+        if (User.isEmailValid(email))
+            this.email = email;
+        else
+            throw new IllegalArgumentException("email must match RFC822 pattern");
     }
 
     public String getUserName() {
