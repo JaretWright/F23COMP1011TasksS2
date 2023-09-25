@@ -3,6 +3,7 @@ package com.example.f23comp1011taskss2;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 public class DBUtility {
     //Add in YOUR user name and password.  For my account, I created a user called student
@@ -18,7 +19,7 @@ public class DBUtility {
      */
     private static String connectURL = "jdbc:mysql://127.0.0.1:3306/F23COMP1011Monday";
 
-    private static String addUserToDB(User user){
+    public static String addUserToDB(User user){
         String rspMessage = "broken";
 
         String sql = "INSERT INTO users VALUES (?,?,?)";
@@ -38,6 +39,10 @@ public class DBUtility {
 
             rspMessage = "User Added";
         }
+        catch (SQLIntegrityConstraintViolationException e)  //this is a duplicate key
+        {
+            rspMessage = "User with "+user.getEmail()+ " already defined";
+        }
         catch (Exception e)
         {
             e.printStackTrace();
@@ -45,6 +50,4 @@ public class DBUtility {
 
         return rspMessage;
     }
-
-
 }
