@@ -1,14 +1,11 @@
 package com.example.f23comp1011taskss2;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -37,7 +34,11 @@ public class CreateTaskController implements Initializable {
 
     @FXML
     void saveTask(ActionEvent event) {
-
+        //1. try to create a task object
+        try{
+            Task task = new Task();
+        }
+        //save it to the database
     }
 
     @Override
@@ -47,5 +48,31 @@ public class CreateTaskController implements Initializable {
 
         //configure the userComboBox to hold users from the DB
         userComboBox.getItems().addAll(DBUtility.getUsersFromDB());
+
+        //configure the spinner to only allow valid durations
+        //0 - 120
+        //i = minimum
+        //i1 = max value
+        //i2 = default value
+        SpinnerValueFactory<Integer> spinnerValueFactory =
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1,120,60);
+        durationSpinner.setValueFactory(spinnerValueFactory);
+        durationSpinner.setEditable(true);
+        TextField spinnerTextField = durationSpinner.getEditor();
+        spinnerTextField.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (newValue.isEmpty())
+            {
+                spinnerTextField.setText("1");
+            }
+            else
+            {
+                try{
+                    Integer.parseInt(newValue);
+                } catch (NumberFormatException e)
+                {
+                    spinnerTextField.setText(oldValue);
+                }
+            }
+        });
     }
 }

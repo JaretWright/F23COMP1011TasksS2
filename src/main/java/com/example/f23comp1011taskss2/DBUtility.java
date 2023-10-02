@@ -82,4 +82,49 @@ public class DBUtility {
         }
         return users;
     }
+
+    public static String addTaskToDB(Task task){
+        String rspMessage = "broken";
+
+        String sql = "INSERT INTO tasks (title, taskDescription, dueDate, creationDate, estimatedLengthInMin," +
+                     " email,status) VALUES (?,?,?,?,?,?,?)";
+
+        ResultSet resultSet = null;
+
+        //"try with resources" will automatically close anything that was defined inside
+        //the () brackets
+        try(
+                Connection conn = DriverManager.getConnection(connectURL,dbUser,password);
+                PreparedStatement ps = conn.prepareStatement(sql, new String[] {"taskID"});
+        )
+        {
+            ps.setString(1,task.getTitle());
+            ps.setString(2,task.getDescription());
+            ps.setDate(3,Date.valueOf(task.getDueDate()));
+            ps.setDate(4,Date.valueOf(task.getCreationDate()));
+            ps.setInt(5,task.getEstimatedLengthInMin());
+            ps.setString(6,task.getUser().getEmail());
+            ps.setString(7,task.getStatus().toString());
+
+            ps.executeUpdate();
+
+            int taskID = -1;
+
+            resultSet = ps.getGeneratedKeys();
+            while (resultSet.next())
+                taskID = resultSet.getInt(1);
+
+            rspMessage = "Task saved with ID: "+taskID;
+        }
+        catch (SQLIntegrityConstraintViolationException e)  //this is a duplicate key
+        {
+            rspMessage = "user not defined in system, task not saved";
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return rspMessage;
+    }
 }
