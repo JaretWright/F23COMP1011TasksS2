@@ -35,9 +35,9 @@ public class CreateTaskController implements Initializable {
     @FXML
     void saveTask(ActionEvent event) {
         //1. try to create a task object
-        try{
-            Task task = new Task();
-        }
+//        try{
+//            Task task = new Task();
+//        }
         //save it to the database
     }
 
@@ -59,10 +59,11 @@ public class CreateTaskController implements Initializable {
         durationSpinner.setValueFactory(spinnerValueFactory);
         durationSpinner.setEditable(true);
         TextField spinnerTextField = durationSpinner.getEditor();
+
         spinnerTextField.textProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue.isEmpty())
             {
-                spinnerTextField.setText("1");
+                spinnerValueFactory.setValue(0);
             }
             else
             {
