@@ -55,6 +55,16 @@ public class User {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        phone = phone.replaceAll("[^0-9]","");
+
+        //North American Dialling plan
+        //3 digits - area code [2-9][0-9]{2}
+        //3 digits - city code [2-9][0-9]{2}
+        //4 digits - can be anything [0-9]{4}
+        //                       705     555   1234
+        if (phone.matches("[2-9][0-9]{2}[2-9][0-9]{6}"))
+            this.phone = phone;
+        else
+            throw new IllegalArgumentException("phone number example (705-555-1234)");
     }
 }
