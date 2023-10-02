@@ -1,9 +1,7 @@
 package com.example.f23comp1011taskss2;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class DBUtility {
     //Add in YOUR user name and password.  For my account, I created a user called student
@@ -49,5 +47,40 @@ public class DBUtility {
         }
 
         return rspMessage;
+    }
+
+    /**
+     * This method will return a list of users from the database
+     */
+    public static ArrayList<User> getUsersFromDB()
+    {
+        ArrayList<User> users = new ArrayList<>();
+
+        //use a try with resources block to access the database and automatically close the connection, statement
+        //and result set
+        String sql = "SELECT * FROM users";
+
+        try (
+                Connection conn = DriverManager.getConnection(connectURL,dbUser,password);
+                Statement statement = conn.createStatement();
+                ResultSet resultSet = statement.executeQuery(sql);
+                )
+        {
+            //loop over the results returned and create new user objects
+            while (resultSet.next())
+            {
+                User newUser = new User(resultSet.getString("email"),
+                                        resultSet.getString("userName"),
+                                        resultSet.getString("phone"));
+
+                users.add(newUser);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return users;
     }
 }
