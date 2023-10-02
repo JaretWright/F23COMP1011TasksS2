@@ -2,7 +2,7 @@ package com.example.f23comp1011taskss2;
 
 import java.util.regex.Pattern;
 
-public class User {
+public class User implements Comparable<User>{
     private String email, userName, phone;
 
     /**
@@ -66,5 +66,15 @@ public class User {
             this.phone = phone;
         else
             throw new IllegalArgumentException("phone number example (705-555-1234)");
+    }
+
+    public String toString()
+    {
+        return String.format("%s (%s)",userName,email);
+    }
+
+    @Override
+    public int compareTo(User otherUser) {
+        return this.email.compareTo(otherUser.getEmail());
     }
 }

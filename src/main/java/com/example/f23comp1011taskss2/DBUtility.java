@@ -58,7 +58,7 @@ public class DBUtility {
 
         //use a try with resources block to access the database and automatically close the connection, statement
         //and result set
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT * FROM users ORDER BY userName ASC";
 
         try (
                 Connection conn = DriverManager.getConnection(connectURL,dbUser,password);
@@ -80,7 +80,6 @@ public class DBUtility {
         {
             e.printStackTrace();
         }
-
         return users;
     }
 }

@@ -1,8 +1,12 @@
 package com.example.f23comp1011taskss2;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class DeleteMeTesting {
     public static void main(String[] args) {
-        User newUser = new User("frank@test.com","Frankie","7055551234");
-        System.out.println(DBUtility.addUserToDB(newUser));
+        ArrayList<User> users = DBUtility.getUsersFromDB();
+        Collections.sort(users);
+        System.out.println(users);
     }
 }

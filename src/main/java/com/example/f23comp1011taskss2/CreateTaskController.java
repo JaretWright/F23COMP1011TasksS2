@@ -44,5 +44,8 @@ public class CreateTaskController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //configure the date picker to automatically have tomorrow as a due date
         dueDatePicker.setValue(LocalDate.now().plusDays(1));
+
+        //configure the userComboBox to hold users from the DB
+        userComboBox.getItems().addAll(DBUtility.getUsersFromDB());
     }
 }
