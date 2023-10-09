@@ -20,6 +20,20 @@ public class Task {
         setUser(user);
     }
 
+    /**
+     * This constructor will be used when creating Task objects from the database.
+     */
+    public Task(int taskID, String title, String description, LocalDate dueDate, LocalDate creationDate, int estimatedLengthInMin, User user, Status status) {
+        setTaskID(taskID);
+        setTitle(title);
+        setDescription(description);
+        this.dueDate = dueDate;
+        setCreationDate(creationDate);
+        setEstimatedLengthInMin(estimatedLengthInMin);
+        this.user = user;
+        this.status = status;
+    }
+
     public int getTaskID() {
         return taskID;
     }
@@ -57,6 +71,8 @@ public class Task {
     }
 
     public void setCreationDate(LocalDate creationDate) {
+        if (creationDate.isAfter(LocalDate.now()))
+            throw new IllegalArgumentException("Creation date cannot be in the future");
         this.creationDate = creationDate;
     }
 

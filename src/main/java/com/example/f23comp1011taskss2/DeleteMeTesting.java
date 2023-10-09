@@ -5,8 +5,7 @@ import java.util.Collections;
 
 public class DeleteMeTesting {
     public static void main(String[] args) {
-        ArrayList<User> users = DBUtility.getUsersFromDB();
-        Collections.sort(users);
-        System.out.println(users);
+        ArrayList<Task> tasks = DBUtility.getTasksFromDB();
+        System.out.println(tasks);
     }
 }
