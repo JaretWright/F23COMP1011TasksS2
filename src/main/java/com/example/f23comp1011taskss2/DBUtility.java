@@ -1,5 +1,7 @@
 package com.example.f23comp1011taskss2;
 
+import javafx.scene.chart.XYChart;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -140,7 +142,7 @@ public class DBUtility {
     }
 
     /**
-     * This method will return a list of users from the database
+     * This method will return a list of tasks from the database
      */
     public static ArrayList<Task> getTasksFromDB()
     {
@@ -181,5 +183,42 @@ public class DBUtility {
             e.printStackTrace();
         }
         return tasks;
+    }
+
+    /**
+     * This method will return a list of tasks from the database
+     *
+     */
+    public static XYChart.Series<String, Integer> getBarChartData(Status status)
+    {
+        XYChart.Series<String, Integer> series = new XYChart.Series<>();
+        series.setName(status.toString());
+
+        //use a try with resources block to access the database and automatically close the connection, statement
+        //and result set
+        String sql = String.format("SELECT MONTHName(creationDate) as month, COUNT(title) AS count " +
+                "FROM tasks " +
+                "WHERE status= '%s' " +
+                "GROUP BY MONTHName(creationDate), status " +
+                "ORDER BY MONTH(creationDate), status; ", status.toString());
+
+        try (
+                Connection conn = DriverManager.getConnection(connectURL,dbUser,password);
+                Statement statement = conn.createStatement();
+                ResultSet resultSet = statement.executeQuery(sql);
+        )
+        {
+            //loop over the results returned and create new user objects
+            while (resultSet.next())
+            {
+                series.getData().add(new XYChart.Data<>(resultSet.getString("month"),
+                                                            resultSet.getInt("count")));
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return series;
     }
 }
